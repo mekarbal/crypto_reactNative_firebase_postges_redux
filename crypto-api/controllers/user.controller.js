@@ -18,7 +18,7 @@ const findUser = async (req, res) => {
   console.log(req.params);
 
   try {
-    const user = await User.findOne({ f_uid: req.params.id });
+    const user = await User.findOne({ where: { f_uid: req.params.id } });
 
     res.send(user);
   } catch (err) {
@@ -26,4 +26,4 @@ const findUser = async (req, res) => {
   }
 };
 
-module.exports = { addUser,findUser };
+module.exports = { addUser, findUser };

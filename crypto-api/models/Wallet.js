@@ -1,27 +1,17 @@
+module.exports = (sequelize, DataTypes) => {
+  const Wallet = sequelize.define("Wallet", {
+    id_user: DataTypes.NUMBER,
+    cryp_name: DataTypes.STRING,
+    value: DataTypes.FLOAT,
+  });
 
-module.exports = (sequelize,DataTypes) => {
-
-    const Wallet = sequelize.define('Wallet',{
-
-        id_user: DataTypes.STRING,
-        cryp_name: DataTypes.STRING,
-        value : DataTypes.FLOAT
+  Wallet.associate = (models) => {
+    Wallet.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false,
+      },
     });
+  };
 
-
-
-    Wallet.associate = models=>{
-        Wallet.belongsTo(models.User,{
-            foreignKey:{
-                allowNull:false
-            }
-        })
-      }
-
-
-   
-
-
-    return Wallet;
-
-}
+  return Wallet;
+};

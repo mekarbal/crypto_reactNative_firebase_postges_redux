@@ -4,5 +4,6 @@ const wallletController = require("../controllers/wallet.controller");
 
 router.post("/add/", wallletController.addWallet);
 router.post("/sell/", wallletController.sellCrypto);
+router.get("/:id", wallletController.findWallet);
 
 module.exports = router;

@@ -8,7 +8,7 @@ const addWallet = async (req, res) => {
     const cryptoName = req.body.cryp_name;
     const currencyValue = req.body.value;
 
-    const user = await User.findOne({ id: idUser });
+    const user = await User.findOne({ where: { id: idUser } });
     const newSolde = user.solde - currencyPrice;
 
     if (user.solde >= currencyPrice) {
@@ -34,6 +34,7 @@ const addWallet = async (req, res) => {
             user.update({
               solde: newSolde,
             });
+            res.send("payement passed successfully");
           });
       } else {
         await Wallet.create({
@@ -69,23 +70,28 @@ const sellCrypto = async (req, res) => {
       },
     });
 
-    const user = await User.findOne({ id: idUser });
+    const user = await User.findOne({ where: { id: idUser } });
     const newSolde = user.solde + currencyPrice;
 
     if (findWallet.length > 0) {
-      if (findWallet[0].value > value) {
-        const newValue = findWallet[0].value - value;
+      if (findWallet[0].value >= value) {
+        let newValue = findWallet[0].value - value;
+
+        if (newValue < 0) {
+          newValue = 0;
+        }
 
         await findWallet[0]
           .update({
             value: newValue,
           })
-          .then(() => {
-            user.update({
+          .then( () => {
+             user.update({
               solde: newSolde,
             });
+
+            res.send(user);
           });
-        res.send("Currency selled successfully");
       } else {
         res.send(`Please set a value less than ${value}`);
       }
@@ -95,4 +101,16 @@ const sellCrypto = async (req, res) => {
   }
 };
 
-module.exports = { addWallet, sellCrypto };
+const findWallet = async (req, res) => {
+  console.log(req.params);
+
+  try {
+    const wallet = await Wallet.findOne({ where: { id_user: req.params.id } });
+
+    res.send(wallet);
+  } catch (err) {
+    res.json(err);
+  }
+};
+
+module.exports = { addWallet, sellCrypto, findWallet };

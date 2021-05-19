@@ -6,7 +6,7 @@ module.exports = (sequelize,DataTypes) => {
         f_uid: DataTypes.STRING,
         solde: {
             type : DataTypes.FLOAT,
-            defaultValue : 5000
+            defaultValue : 5000.00
         },
         localCrncy: {
             type : DataTypes.STRING,
