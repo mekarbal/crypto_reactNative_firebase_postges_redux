@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const db = require("./models");
 const cors = require("cors");
+const mail = require("./router/mail");
 app.use(express.json());
 app.use(cors());
 app.use(function (req, res, next) {
@@ -14,6 +15,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "*");
   next();
 });
+
 app.use(
   express.urlencoded({
     extended: true,
@@ -25,6 +27,7 @@ const walletRoutes = require("./router/wallet");
 
 app.use("/user", userRoutes);
 app.use("/wallet", walletRoutes);
+app.use("/mail", mail);
 
 db.sequelize.sync().then((res) => {
   app.listen(port, () => {
